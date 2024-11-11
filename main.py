@@ -3,6 +3,7 @@ from typing import Dict
 import requests
 import rasterio
 from rasterio.io import MemoryFile
+from rasterio.mask import mask  # Corrigido para importar a função mask corretamente
 from shapely.geometry import Point
 from pyproj import Transformer
 import numpy as np
@@ -30,7 +31,7 @@ def avaliar_risco_incendio(lat: float = Query(..., description="Latitude"), lon:
             shapes = [buffer.__geo_interface__]
 
             # Criar uma máscara para o buffer
-            out_image, out_transform = rasterio.mask.mask(src, shapes, crop=True)
+            out_image, out_transform = mask(src, shapes, crop=True)  # Usando a função mask corretamente
             out_image = out_image[0]
 
             # Substituir valores NaN ou negativos, se necessário
